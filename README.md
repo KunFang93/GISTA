@@ -4,7 +4,7 @@ A tool for finding Group-, Individual-sample Specific TADs (GISTA)
 # Installation
 ```
 Step1: install mamba from https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html
-Step2: mamba create -n gista python panadas numpy seaborn scipy tqdm logomaker
+Step2: mamba create -n gista python pandas numpy seaborn scipy tqdm logomaker
 Step3: mamba activate gista
 Step4: cd <path to the GISTA>
 Step5: pip install --editable .
