@@ -9,4 +9,4 @@ Step3: mamba activate gista
 ```
 
 # Quick Start
-#### Currently GISTA only accept TopDom output formats. If you need help, please contact author
+#### Currently GISTA only accept TopDom output formats (please check the exmaple data). If you need help, please contact author
