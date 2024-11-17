@@ -173,7 +173,7 @@ class TadsArray(object):
                     current_sample_annot = {}
                     for sample in self.samples:
                         current_annot_list = list(data_tads_split[sample][chrom][i].loc[:,'tag'].str[0] +
-                                                  (data_tads_split[sample][chrom][i].loc[:,'size']/binsize).astype(str))
+                                                  (data_tads_split[sample][chrom][i].loc[:,'size']/self.binsize).astype(str))
                         current_sample_annot[sample]= ','.join(current_annot_list)
                         current_vec = data_tads_split[sample][chrom][i].loc[:,'vec']
                         current_vec.index.values[:] = np.arange(len(current_vec))
