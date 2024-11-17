@@ -133,6 +133,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
         features_sf = features_df.loc[:, sf_type]
         # calculate pval for SV
         print("Permutation Test")
+        pd.concat([features_nd, features_sf]).to_csv('test.csv')
         cur_pvals = cal_pval(pd.concat([features_nd, features_sf], axis=1), comp)
         # give mnemonic
         features_nd_marked, nd_cuts = class_process(features_nd, nd_type[0], nd_type[2], nd_type[1], group_cutoff, individual_cutoff)
@@ -164,7 +165,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
                                                         features_sf_marked,
                                                         cur_types[0], cur_types[2], cur_types[1])
         # assign coordinate back
-        features_df_marked = coor_annot(features_df_marked, tads_sub_id_list, tads_sub_annot_dict)
+        features_df_marked = coor_annot(features_df_marked, tads_sub_id_list, tads_sub_annot_dict,samples)
         # differential changes, specific change type
         features_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         summarize_dict, summarize_list_dict, sample_changes = summarize_change_all(
@@ -365,7 +366,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
                                                  features_sf_marked,
                                                  cur_types[0], cur_types[2], cur_types[1])
         # assign coordinate back
-        features_df_marked = coor_annot(features_df_marked, tads_sub_id_list, tads_sub_annot_dict)
+        features_df_marked = coor_annot(features_df_marked, tads_sub_id_list, tads_sub_annot_dict,samples)
         # differential changes, specific change type
         features_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         summarize_dict, summarize_list_dict, sample_changes = summarize_change_all(
