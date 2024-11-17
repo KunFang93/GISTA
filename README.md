@@ -1,5 +1,5 @@
 # GISTA
-A tool for finding Group-, Individual-sample Specific TADs (GISTA)
+A light-weight tool for finding Group-, Individual-sample Specific TADs (GISTA)
 
 # Installation
 ```
