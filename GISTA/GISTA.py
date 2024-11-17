@@ -369,6 +369,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
         features_df_marked = coor_annot(features_df_marked, tads_sub_id_list, tads_sub_annot_dict,samples)
         # differential changes, specific change type
         features_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
+        print(comparison_dict, comparison_dict[comparison_types[comp][2]][1])
         summarize_dict, summarize_list_dict, sample_changes = summarize_change_all(
             features_dchange,
             tads_sub_array_dict, comparison_dict[comparison_types[comp][2]][1],
