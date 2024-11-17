@@ -303,7 +303,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
                                                                   "The comparison separate by ';' and treat and control separate by ',',"
                                                                   "The second sample is control")
 @click.option('--binsize', '-bs', default=40000, type=int, help = 'resolution/binsize of the TADs')
-@click.option('--groupcut', '-gc', default=0.3, type=float, help = 'Group level high variation cutoff')
+@click.option('--groupcut', '-gc', default=0.5, type=float, help = 'Group level high variation cutoff')
 @click.option('--individualcut', '-ic', default=0.7, type=float, help = 'Individual level high variation cutoff')
 @click.option('--pseudorep', '-pr', default=5, type=int, help = 'The number of Pseudo-replication')
 @click.option('--outdir', '-od', type=click.Path(), help = 'Output folder')
