@@ -404,8 +404,8 @@ def permutation_test(df, gcomp, lvl1_coef=0.7, lvl2_coef=0.3, n_permutations=100
     data = df.copy()
     # Set the seed for the random number generator
     np.random.seed(42)
-    lvl1 = gcomp.split('.')[2]
-    lvl2 = gcomp.split('.')[0]
+    lvl1 = gcomp.split('vs')[1]
+    lvl2 = gcomp.split('vs')[0]
     # Q99 of TT.vs.NT_nd
     Qnd_group = data['{}_nd'.format(gcomp)].quantile(0.99)
     Qsf_group = data['{}_sf'.format(gcomp)].quantile(0.99)
