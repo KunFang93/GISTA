@@ -1,14 +1,14 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='GISTA',
     version='1.0',
-    py_modules=['GISTA'],
+    packages=find_packages(),  # Automatically find the 'GISTA' package
     install_requires=[
-        'Click','scipy','numpy','matplotlib','pandas','seaborn','tqdm','logomaker'
+        'Click', 'scipy', 'numpy', 'matplotlib', 'pandas', 'seaborn', 'tqdm', 'logomaker'
     ],
     entry_points='''
-    [console_scripts]
-    GISTA=GISTA:cli
+        [console_scripts]
+        GISTA=GISTA:cli
     '''
 )
