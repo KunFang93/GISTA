@@ -86,7 +86,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
     if outdir is None:
         outdir = './'
     try:
-        samples_df = pd.read_csv(samplesfile,index=False)
+        samples_df = pd.read_csv(samplesfile)
     except UnicodeDecodeError:
         samples_df = pd.read_excel(samplesfile)
     group_cutoff = groupcut
@@ -283,7 +283,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
     if outdir is None:
         outdir = './'
     try:
-        samples_df = pd.read_csv(samplesfile, index=False)
+        samples_df = pd.read_csv(samplesfile)
     except UnicodeDecodeError:
         samples_df = pd.read_excel(samplesfile)
     group_cutoff = groupcut
