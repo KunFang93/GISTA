@@ -91,7 +91,7 @@ class TadsArray(object):
         self.binsize = binsize
     def loading_files(self):
         print("Loading files")
-        data_tads = {sample:0 for sample in samples}
+        data_tads = {sample:0 for sample in self.samples}
         tad_ids = []
         for idx,file in enumerate(self.tads_files):
             current_df = pd.read_csv(file,sep='\t')
