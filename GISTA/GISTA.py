@@ -82,13 +82,15 @@ error_message = "Please contact author kf2799@cumc.columbia.edu for further supp
 @click.option('--groupcut', '-gc', default=0.7, type=float, help = 'Group level high variation cutoff')
 @click.option('--individualcut', '-ic', default=0.7, type=float, help = 'Individual level high variation cutoff')
 @click.option('--outdir', '-od', type=click.Path(), help = 'Output folder')
-def multi(samplesfile, comparison, binsize, group_cutoff, individual_cutoff, outdir):
+def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
     if outdir is None:
         outdir = './'
     try:
-        samples_df = pd.read_csv(samplesfile)
+        samples_df = pd.read_csv(samplesfile,index=False)
     except UnicodeDecodeError:
         samples_df = pd.read_excel(samplesfile)
+    group_cutoff = groupcut
+    individual_cutoff = individualcut
     comparison_dict, comparison_types = generate_comparison_dict(samples_df, comparison)
     samples = samples_df['IndividualID'].values
     tads_files = samples_df['FileName'].values
@@ -277,13 +279,15 @@ def multi(samplesfile, comparison, binsize, group_cutoff, individual_cutoff, out
 @click.option('--individualcut', '-ic', default=0.7, type=float, help = 'Individual level high variation cutoff')
 @click.option('--pseudorep', '-pr', default=5, type=int, help = 'The number of Pseudo-replication')
 @click.option('--outdir', '-od', type=click.Path(), help = 'Output folder')
-def two(samplesfile, comparison, binsize, group_cutoff, individual_cutoff, pseudorep, outdir):
+def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, outdir):
     if outdir is None:
         outdir = './'
     try:
-        samples_df = pd.read_csv(samplesfile)
+        samples_df = pd.read_csv(samplesfile, index=False)
     except UnicodeDecodeError:
         samples_df = pd.read_excel(samplesfile)
+    group_cutoff = groupcut
+    individual_cutoff = individualcut
     samples = samples_df['IndividualID'].values
     tads_files = samples_df['FileName'].values
     Path(outdir).mkdir(parents=True, exist_ok=True)
