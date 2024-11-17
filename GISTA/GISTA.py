@@ -71,7 +71,7 @@ def cli(config):
     pass
 
 error_message = "Please contact author kf2799@cumc.columbia.edu for further supporting, thanks for your interesting!"
-
+    
 @cli.command(help_priority=1, help='Multi-samples mode for GISTA')
 @click.option('--samplesfile', '-sf', type=click.Path(exists=True), required=True,
               help='sample metadata sheet, contain TopDom (like) files, .csv or .xlsx')
@@ -177,20 +177,47 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
         features_df_marked = pd.merge(features_df_marked, sample_changes, on='tads_id',how='outer')
         features_df_marked = features_df_marked.fillna('NotAvail')
         # plot sample change logo
-        ivh_nd_norm = plotlogo(summarize_list_dict['HS']['ND'], '{}/{}_IVH_ND_logo.png'.format(outdir, comp))
-        ivh_sf_norm = plotlogo(summarize_list_dict['HS']['SF'], '{}/{}_IVH_SF_logo.png'.format(outdir, comp))
-        ivh_mix_norm = plotlogo(summarize_list_dict['HS']['Mixed'], '{}/{}_IVH_Mixed_logo.png'.format(outdir, comp))
-
-        imc_nd_norm = plotlogo(summarize_list_dict['LS']['ND'], '{}/{}_IMC_ND_logo.png'.format(outdir, comp))
-        imc_sf_norm = plotlogo(summarize_list_dict['LS']['SF'], '{}/{}_IMC_SF_logo.png'.format(outdir, comp))
-        imc_mix_norm = plotlogo(summarize_list_dict['LS']['Mixed'], '{}/{}_IMC_Mixed_logo.png'.format(outdir, comp))
-
-        nd_norm = plotlogo(summarize_list_dict['HS']['ND'] + summarize_list_dict['LS']['ND'],
-                           '{}/{}_ND_logo.png'.format(outdir, comp))
-        sf_norm = plotlogo(summarize_list_dict['HS']['SF'] + summarize_list_dict['LS']['SF'],
-                           '{}/{}_SF_logo.png'.format(outdir, comp))
-        mix_norm = plotlogo(summarize_list_dict['HS']['Mixed'] + summarize_list_dict['LS']['Mixed'],
-                            '{}/{}_Mixed_logo.png'.format(outdir, comp))
+        # plot sample change logo
+        try:
+            ivh_nd_norm = plotlogo(summarize_list_dict['HS']['ND'], '{}/{}_IVH_ND_logo.png'.format(outdir, comp))
+        except IndexError:
+            print('Skip empty matrix for IVH_ND')
+        try:
+            ivh_sf_norm = plotlogo(summarize_list_dict['HS']['SF'], '{}/{}_IVH_SF_logo.png'.format(outdir, comp))
+        except IndexError:
+            print('Skip empty matrix for IVH_SF')
+        try:
+            ivh_mix_norm = plotlogo(summarize_list_dict['HS']['Mixed'], '{}/{}_IVH_Mixed_logo.png'.format(outdir, comp))
+        except IndexError:
+            print('Skip empty matrix for IVH_Mixed')
+        try:
+            imc_nd_norm = plotlogo(summarize_list_dict['LS']['ND'], '{}/{}_IMC_ND_logo.png'.format(outdir, comp))
+        except IndexError:
+            print('Skip empty matrix for IMC_ND')
+        try:
+            imc_sf_norm = plotlogo(summarize_list_dict['LS']['SF'], '{}/{}_IMC_SF_logo.png'.format(outdir, comp))
+        except IndexError:
+            print('Skip empty matrix for IMC_SF')
+        try:
+            imc_mix_norm = plotlogo(summarize_list_dict['LS']['Mixed'],'{}/{}_IMC_Mixed_logo.png'.format(outdir, comp))
+        except IndexError:
+            print('Skip empty matrix for IMC_Mixed')
+        try:
+            nd_norm = plotlogo(summarize_list_dict['HS']['ND'] + summarize_list_dict['LS']['ND'],
+                               '{}/{}_ND_logo.png'.format(outdir, comp))
+        except IndexError:
+            print('Skip empty matrix for ND')
+        try:
+            sf_norm = plotlogo(summarize_list_dict['HS']['SF'] + summarize_list_dict['LS']['SF'],
+                               '{}/{}_SF_logo.png'.format(outdir, comp))
+        except IndexError:
+            print('Skip empty matrix for SF')
+        try:
+            mix_norm = plotlogo(
+                summarize_list_dict['HS']['Mixed'] + summarize_list_dict['LS']['Mixed'],
+                '{}/{}_Mixed_logo.png'.format(outdir, comp))
+        except IndexError:
+            print('Skip empty matrix for Mixed')
 
         # finalize the pval
         mask = np.full(len(features_df_marked), False)
@@ -203,14 +230,14 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
             features_df_marked.to_excel(writer, index=False, sheet_name=f"{comp}_total_info")
             features_df_dchange.to_excel(writer, index=False, sheet_name=f"{comp}_SV")
 
-        features_TTvsNT_df_marked['GroupChange'] = pd.Categorical(features_TTvsNT_df_marked['GroupChange'],
+        features_df_marked['GroupChange'] = pd.Categorical(features_df_marked['GroupChange'],
                                                                   categories=['C', 'MV', 'SV'], ordered=True)
         plotHeatmap(features_df_marked, [cur_types[0], cur_types[2], cur_types[1]])
         features_dict[comp] = features_df_marked
     
     # summary
     summary_dict = {'GroupChange': [], 'Type': [], 'Count': []}
-    for comp in comparison_dict:
+    for comp in comparison_types:
         cur_feature_df_marked = features_dict[comp]
         bio_mark = Counter(cur_feature_df_marked['GroupChange'])
         for key in bio_mark:
@@ -291,6 +318,9 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
     individual_cutoff = individualcut
     samples = samples_df['IndividualID'].values
     tads_files = samples_df['FileName'].values
+    # remake samples with pseudorep
+    samples = [f'{sample}{i}' for sample in samples for i in range(pseudorep)]
+    tads_files = [tad_f for tad_f in tads_files for i in range(pseudorep)]
     Path(outdir).mkdir(parents=True, exist_ok=True)
 
     Tads_array = TadsArray(tads_files, samples, binsize)
@@ -317,7 +347,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
     plt.tight_layout()
     plt.close()
 
-    Tads_matrix = TadsMatrix(tads_sub_array_dict, samples, tads_sub_id_list,onerep=True, pseudorep=pseudorep)
+    Tads_matrix = TadsMatrix(tads_sub_array_dict, samples, tads_sub_id_list)
     comparison_tmp_dict, comparison_types = generate_comparison_dict(samples_df, comparison)
     comparison_dict = expand_dict_elements(comparison_tmp_dict, pseudorep)
     # trt type at 0 position and ctrl type at the 1 position
@@ -345,7 +375,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
         # visual 
         plt.rcParams["font.weight"] = "bold"
         plt.rcParams["axes.labelweight"] = "bold"
-        f, ax = plt.subplots(1, 2, sharey=True, sharex=True)
+        f, ax = plt.subplots(1, 2, sharey=True, sharex=True, figsize=(8,4))
         ax1 = ax[0]
         sns.kdeplot(data=np.log2(nd_data + 0.1), ax=ax1, color='black', fill=True)
         ax1.axvline(np.log2(nd_cuts[0] + 0.1), linewidth=1, color='r', ls='--')
@@ -369,7 +399,6 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
         features_df_marked = coor_annot(features_df_marked, tads_sub_id_list, tads_sub_annot_dict,samples)
         # differential changes, specific change type
         features_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
-        print(comparison_dict, comparison_dict[comparison_types[comp][2]][1])
         summarize_dict, summarize_list_dict, sample_changes = summarize_change_all(
             features_dchange,
             tads_sub_array_dict, comparison_dict[comparison_types[comp][2]][1],
@@ -378,21 +407,20 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
         features_df_marked['ChangeCodes'] = features_df_marked['tads_id'].map(summarize_dict)
         features_df_marked = pd.merge(features_df_marked, sample_changes, on='tads_id', how='outer')
         features_df_marked = features_df_marked.fillna('NotAvail')
-        # plot sample change logo
-        ivh_nd_norm = plotlogo(summarize_list_dict['HS']['ND'], '{}/{}_IVH_ND_logo.png'.format(outdir, comp))
-        ivh_sf_norm = plotlogo(summarize_list_dict['HS']['SF'], '{}/{}_IVH_SF_logo.png'.format(outdir, comp))
-        ivh_mix_norm = plotlogo(summarize_list_dict['HS']['Mixed'], '{}/{}_IVH_Mixed_logo.png'.format(outdir, comp))
-
-        imc_nd_norm = plotlogo(summarize_list_dict['LS']['ND'], '{}/{}_IMC_ND_logo.png'.format(outdir, comp))
-        imc_sf_norm = plotlogo(summarize_list_dict['LS']['SF'], '{}/{}_IMC_SF_logo.png'.format(outdir, comp))
-        imc_mix_norm = plotlogo(summarize_list_dict['LS']['Mixed'], '{}/{}_IMC_Mixed_logo.png'.format(outdir, comp))
-
-        nd_norm = plotlogo(summarize_list_dict['HS']['ND'] + summarize_list_dict['LS']['ND'],
-                           '{}/{}_ND_logo.png'.format(outdir, comp))
-        sf_norm = plotlogo(summarize_list_dict['HS']['SF'] + summarize_list_dict['LS']['SF'],
-                           '{}/{}_SF_logo.png'.format(outdir, comp))
-        mix_norm = plotlogo(summarize_list_dict['HS']['Mixed'] + summarize_list_dict['LS']['Mixed'],
-                            '{}/{}_Mixed_logo.png'.format(outdir, comp))
+        gcomp = comp.split('vs')[0]
+        # Iterate through the dictionary and decide which to plot, Two condition only has LS frequency
+        for key1 in ['HS', 'LS']:
+            for key2 in ['ND', 'SF', 'Mixed']:
+                try:
+                    matrix = summarize_list_dict[key1][key2]
+                    if len(matrix) > 0:
+                        cur_df = pd.DataFrame(matrix.mean(),columns=[f'{gcomp}']).T
+                        # Generate the plot for the current matrix
+                        plotlogo(cur_df,f"{outdir}/{comp}_{key1}_{key2}_logo.png")
+                    else:
+                        print(f"Skip empty or invalid matrix for {key1}_{key2}")
+                except KeyError:
+                    print(f"Missing key in summarize_list_dict: {key1}_{key2}")
 
         # finalize the pval
         mask = np.full(len(features_df_marked), False)
@@ -405,14 +433,14 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
             features_df_marked.to_excel(writer, index=False, sheet_name=f"{comp}_total_info")
             features_df_dchange.to_excel(writer, index=False, sheet_name=f"{comp}_SV")
 
-        features_TTvsNT_df_marked['GroupChange'] = pd.Categorical(features_TTvsNT_df_marked['GroupChange'],
+        features_df_marked['GroupChange'] = pd.Categorical(features_df_marked['GroupChange'],
                                                                   categories=['C', 'MV', 'SV'], ordered=True)
         plotHeatmap(features_df_marked, [cur_types[0], cur_types[2], cur_types[1]])
         features_dict[comp] = features_df_marked
 
     # summary
     summary_dict = {'GroupChange': [], 'Type': [], 'Count': []}
-    for comp in comparison_dict:
+    for comp in comparison_types:
         cur_feature_df_marked = features_dict[comp]
         bio_mark = Counter(cur_feature_df_marked['GroupChange'])
         for key in bio_mark:

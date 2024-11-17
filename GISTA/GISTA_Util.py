@@ -306,23 +306,11 @@ class TadsArray(object):
         return tads_sub_array_dict, tads_sub_annot_dict, tads_sub_id_list
 
 class TadsMatrix(object):
-    def __init__(self,tads_array_dict,samples,tads_id_list,onerep=False, pseudorep =5):
+    def __init__(self,tads_array_dict,samples,tads_id_list):
         self.flexibility = 2
         self.tads_id_list = tads_id_list
-        if not onerep:
-            self.tads_array_dict = tads_array_dict
-            self.samples = samples
-        else:
-            # make identical pseudo-rep
-            new_tads_array_dict = {tads_id:{} for tads_id in tads_id_list}
-            new_samples = [f'{sample}{i}' for sample in samples for i in range(pseudorep)]
-            for tads_id in tads_id_list:
-                cur_dict = tads_array_dict[tads_id]
-                for key in cur_dict:
-                    for i in range(pseudorep):
-                        new_tads_array_dict[tads_id][f'{key}{i}'] = cur_dict[key]
-            self.tads_array_dict = new_tads_array_dict
-            self.samples = new_samples
+        self.tads_array_dict = tads_array_dict
+        self.samples = samples
     def _neo_del_score(self,input_dict):
         # neo positive; del negative
         sum_series = pd.DataFrame.from_dict(input_dict,orient='index').sum(axis=1)
@@ -613,9 +601,6 @@ def summarize_changes(array_dict,changetype,ctrl_samples,trt_samples):
                     summarize_df.loc[ts, 'F'] += 0
     return summarize_df
 
-from functools import reduce
-import pandas as pd
-
 def summarize_change_all(dchange_df, tads_sub_array_dict, ctrl_samples, trt_samples):
     summarize_list_dict = {'HS': {'ND': [], 'SF': [], 'Mixed': []},
                            'LS': {'ND': [], 'SF': [], 'Mixed': []}}
@@ -704,12 +689,12 @@ def plotHeatmap(features_df_marked, types):
         print(group)
         if group in ['C','MV']:
             current_df = df[types].replace(value2int)
-            current_df.sort_values([types],inplace=True)
+            current_df.sort_values(types,inplace=True)
             features_list.append(current_df)
             features_list.append(pd.DataFrame(0,index=np.arange(30),columns=list(current_df.columns)))
             features_len_list.append(len(current_df))
         else:
-            current_indi = df[(df[types[0]]=='high')&(df[types[2]]=='high')][[types]].replace(value2int)
+            current_indi = df[(df[types[0]]=='high')&(df[types[2]]=='high')][types].replace(value2int)
             current_indi.sort_values(types,inplace=True)
             features_list.append(current_indi)
             features_list.append(pd.DataFrame(0,index=np.arange(30),columns=list(current_indi.columns)))
@@ -736,4 +721,3 @@ def expand_dict_elements(input_dict, rep=5):
             for sublist in value
         ]
     return expanded_dict
-
