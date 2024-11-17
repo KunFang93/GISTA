@@ -127,8 +127,8 @@ class TadsArray(object):
         return data_dist_tads_df,data_stat_tads_df
     def _split_by_common(self, data_tads, common_coor):
         # return data_tads_split (data_tads_split['NT1']['chr1'][0])
-        total_num_tads_array = {sample:0 for sample in samples}
-        data_tads_split ={sample:{} for sample in samples}
+        total_num_tads_array = {sample:0 for sample in self.samples}
+        data_tads_split ={sample:{} for sample in self.samples}
         for sample in self.samples:
             current_df = data_tads[sample]
             # group by chromosomes
@@ -229,7 +229,7 @@ class TadsArray(object):
         trt_tads_split_idx = np.cumsum(trt_tads_num)
         return trt_tads_split_idx[:-1],ctrl_tads_split_idx[:-1]
     def new_idx(self,split_idx_dict,minlen_sample):
-        final_split_idx = {sample:0 for sample in samples}
+        final_split_idx = {sample:0 for sample in self.samples}
         seg_idx = [split_idx_dict[minlen_sample][sample][0] for sample in split_idx_dict[minlen_sample]]
         # find the common seg for all pairwised comparison
         common_seg_idx = sorted(list(set(seg_idx[0]).intersection(*seg_idx)))
@@ -241,7 +241,7 @@ class TadsArray(object):
             final_split_idx[sample] = [target_seg_idx[idx] for idx in new_idx]
         return final_split_idx
     def find_subcommon(self,input_dict,samples):
-        split_idx_dict = {sample:{} for sample in samples}
+        split_idx_dict = {sample:{} for sample in self.samples}
         min_len = len(min(input_dict.items(),key=lambda x:len(x[1]))[1])
         minlen_samples = [sample for sample in samples if len(input_dict[sample])==min_len]
         final_seg = {}
