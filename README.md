@@ -13,11 +13,19 @@ Step5: pip install --editable .
 # Quick Start
 #### Currently GISTA only accept TopDom output formats (please check the exmaple data). If you need help, please contact author
 ### Multi-Samples Mode
+```
+# 'RT,PT;PT-RT,NT' mean process RT.vs.PT and PT+RT.vs.NT
+# The comparison separate by ';' and treat and control separate by ',',The second sample is control
+# see SampleList_Multi.xlsx exmaple in data
+GISTA multi -sf SampleList_Multi.xlsx -c 'RT,PT;PT-RT,NT' --binsize 40000
+```
+
 ### Two-Samples Mode
 ```
 # 'RT,PT;PT-RT,NT' mean process RT.vs.PT and PT+RT.vs.NT
 # The comparison separate by ';' and treat and control separate by ',',The second sample is control
-GISTA two -sf SampleList_Two_Server.xlsx -c 'RT,PT;PT-RT,NT' --binsize 40000
+# see SampleList_Multi.xlsx exmaple in data
+GISTA two -sf SampleList_Two.xlsx -c 'RT,PT;PT-RT,NT' --binsize 40000
 ```
 
 # Manual
