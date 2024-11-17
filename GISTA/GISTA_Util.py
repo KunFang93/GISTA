@@ -677,7 +677,7 @@ def plotlogo(summarize_df,outname):
     plt.close()
     return summarize_df_norm
 
-def plotHeatmap(features_df_marked, types):
+def plotHeatmap(features_df_marked, types, outname):
     # individual specific number
     # indi_spe_list = ['high_high_high','high_medium_high','high_low_high']
     # plot clustermap
@@ -710,7 +710,7 @@ def plotHeatmap(features_df_marked, types):
     ax = sns.heatmap(features_final_df, xticklabels=False, cmap=cmap)
     ax.set_title(types[0])
     ax.hlines([1, 2], colors='black', *ax.get_xlim())
-    plt.savefig(f'{outdir}/{types[0]}_heatmap.png')
+    plt.savefig(outname)
     plt.close()
 
 def expand_dict_elements(input_dict, rep=5):

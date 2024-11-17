@@ -232,7 +232,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
 
         features_df_marked['GroupChange'] = pd.Categorical(features_df_marked['GroupChange'],
                                                                   categories=['C', 'MV', 'SV'], ordered=True)
-        plotHeatmap(features_df_marked, [cur_types[0], cur_types[2], cur_types[1]])
+        plotHeatmap(features_df_marked, [cur_types[0], cur_types[2], cur_types[1]], f'{outdir}/{cur_types[0]}_heatmap.png')
         features_dict[comp] = features_df_marked
     
     # summary
@@ -435,7 +435,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
 
         features_df_marked['GroupChange'] = pd.Categorical(features_df_marked['GroupChange'],
                                                                   categories=['C', 'MV', 'SV'], ordered=True)
-        plotHeatmap(features_df_marked, [cur_types[0], cur_types[2], cur_types[1]])
+        plotHeatmap(features_df_marked, [cur_types[0], cur_types[2], cur_types[1]],f'{outdir}/{cur_types[0]}_heatmap.png')
         features_dict[comp] = features_df_marked
 
     # summary
