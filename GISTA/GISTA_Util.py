@@ -287,7 +287,7 @@ class TadsArray(object):
         for array_mat_id in tqdm(vector_matrices):
             current_df = vector_matrices[array_mat_id]
             current_dict = self._matrix2array(current_df)
-            current_split_seg = self.find_subcommon(current_dict,samples)
+            current_split_seg = self.find_subcommon(current_dict,self.samples)
             chunk_num = len(current_split_seg[self.samples[0]])
             for idx in range(chunk_num):
                 tads_sub_id = "{}_{}".format(array_mat_id,idx)
