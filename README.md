@@ -12,3 +12,7 @@ Step5: pip install --editable .
 
 # Quick Start
 #### Currently GISTA only accept TopDom output formats (please check the exmaple data). If you need help, please contact author
+
+# Citation
+If you find this tools useful, please consider cite 
+Choppavarapu, L., Fang, K., Liu, T., & Jin, V. X. (2024). Hi-C profiling in tissues reveals 3D chromatin-regulated breast tumor heterogeneity and tumor-specific looping-mediated biological pathways. bioRxiv, 2024-03.
