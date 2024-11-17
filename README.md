@@ -15,7 +15,8 @@ Step5: pip install --editable .
 ### Multi-Samples Mode
 ### Two-Samples Mode
 ```
-# 'RT,PT;PT-RT,NT', The comparison separate by ';' and treat and control separate by ',',The second sample is control
+# 'RT,PT;PT-RT,NT' mean process RT.vs.PT and PT+RT.vs.NT
+# The comparison separate by ';' and treat and control separate by ',',The second sample is control
 GISTA two -sf SampleList_Two_Server.xlsx -c 'RT,PT;PT-RT,NT'
 ```
 
