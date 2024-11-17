@@ -23,6 +23,8 @@ import pandas as pd
 from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
+from dask.dataframe.multi import required
+
 from .GISTA_Util import *
 
 # class for setting up subcommand order.
@@ -73,8 +75,8 @@ def cli(config):
 error_message = "Please contact author kf2799@cumc.columbia.edu for further supporting, thanks for your interesting!"
 
 @cli.command(help_priority=1, help='Multi-samples mode for GISTA')
-@click.option('--samplesfile', '-sf', type=click.Path(exists=True),
-              help='sample metadata sheet, contain TopDom (like) file list.')
+@click.option('--samplesfile', '-sf', type=click.Path(exists=True), required=True,
+              help='sample metadata sheet, contain TopDom (like) files, .csv or .xlsx')
 @click.option('--comparison', '-c', type=str, required=True, help="Comparison string in the format 'RT,PT;PT-RT,NT', "
                                                                   "The comparison separate by ';' and treat and control separate by ',',"
                                                                   "The second sample is control")
@@ -85,7 +87,10 @@ error_message = "Please contact author kf2799@cumc.columbia.edu for further supp
 def multi(samplesfile, comparison, binsize, group_cutoff, individual_cutoff, outdir):
     if outdir is None:
         outdir = './'
-    samples_df = pd.read_excel(samplesfile)
+    try:
+        samples_df = pd.read_csv(samplesfile)
+    except UnicodeDecodeError:
+        samples_df = pd.read_excel(samplesfile)
     comparison_dict, comparison_types = generate_comparison_dict(samples_df, comparison)
     samples = samples_df['IndividualID'].values
     tads_files = samples_df['FileName'].values
@@ -264,8 +269,8 @@ def multi(samplesfile, comparison, binsize, group_cutoff, individual_cutoff, out
 
 
 @cli.command(help_priority=1, help='Multi-samples mode for GISTA')
-@click.option('--samplesfile', '-sf', type=click.Path(exists=True),
-              help='sample metadata sheet, contain TopDom (like) file list.')
+@click.option('--samplesfile', '-sf', type=click.Path(exists=True),required=True,
+              help='sample metadata sheet, contain TopDom (like) file, .csv or .xlsx')
 @click.option('--comparison', '-c', type=str, required=True, help="Comparison string in the format 'RT,PT;PT-RT,NT', "
                                                                   "The comparison separate by ';' and treat and control separate by ',',"
                                                                   "The second sample is control")
@@ -277,7 +282,10 @@ def multi(samplesfile, comparison, binsize, group_cutoff, individual_cutoff, out
 def two(samplesfile, comparison, binsize, group_cutoff, individual_cutoff, pseudorep, outdir):
     if outdir is None:
         outdir = './'
-    samples_df = pd.read_excel(samplesfile)
+    try:
+        samples_df = pd.read_csv(samplesfile)
+    except UnicodeDecodeError:
+        samples_df = pd.read_excel(samplesfile)
     samples = samples_df['IndividualID'].values
     tads_files = samples_df['FileName'].values
     Path(outdir).mkdir(parents=True, exist_ok=True)
