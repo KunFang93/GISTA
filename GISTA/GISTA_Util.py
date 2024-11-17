@@ -335,7 +335,7 @@ class TadsMatrix(object):
     def matrix_build(self,input_dict):
         # return 'skew-symmetric' matrix with shape sample x sample. The 'rows' used as the ctrl, for exmaple: the element in ['NT1','NT2'] means
         # use 'NT1' as ctrl, the tads array change in 'NT2'; each element in the matrix is in two dimensional [neo/del,split/fuse].
-        sf_df_raw = pd.DataFrame(0,index=self.samples,columns=self.samples)
+        sf_df_raw = pd.DataFrame(0.0,index=self.samples,columns=self.samples)
         nd_df_raw = self._neo_del_score(input_dict)
         nd_df = nd_df_raw.abs()
         for sample in itertools.combinations(self.samples,2):
