@@ -157,7 +157,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
         ax2.axvline(np.log2(sf_cuts[1] + 0.1), linewidth=1, color='g', ls='--')
         ax2.set_xlabel('Log2(Split-Fuse Score+0.1)')
         plt.tight_layout()
-        plt.savefig(f'{outdir}/ND_SF_toCate.png', dpi=300)
+        plt.savefig(f'{outdir}/{comp}_ND_SF_toCate.png', dpi=300)
         plt.close()
         
         # get annotation
@@ -388,7 +388,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
         ax2.axvline(np.log2(sf_cuts[1] + 0.1), linewidth=1, color='g', ls='--')
         ax2.set_xlabel('Log2(Split-Fuse Score+0.1)')
         plt.tight_layout()
-        plt.savefig(f'{outdir}/ND_SF_toCate.png', dpi=300)
+        plt.savefig(f'{outdir}/{comp}_ND_SF_toCate.png', dpi=300)
         plt.close()
 
         # get annotation
