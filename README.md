@@ -17,7 +17,7 @@ Step5: pip install --editable .
 ```
 # 'RT,PT;PT-RT,NT' mean process RT.vs.PT and PT+RT.vs.NT
 # The comparison separate by ';' and treat and control separate by ',',The second sample is control
-GISTA two -sf SampleList_Two_Server.xlsx -c 'RT,PT;PT-RT,NT' -bs 40000
+GISTA two -sf SampleList_Two_Server.xlsx -c 'RT,PT;PT-RT,NT' --binsize 40000
 ```
 
 # Manual
