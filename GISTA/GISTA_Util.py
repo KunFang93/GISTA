@@ -18,7 +18,7 @@ from functools import reduce
 # v5 add two conditions comparison
 def generate_comparison_dict(samples_df, comparison_string):
     # Group samples by GroupID
-    group_samples = samples_df.groupby("GroupID")["IndvidualID"].apply(list).to_dict()
+    group_samples = samples_df.groupby("GroupID")["IndividualID"].apply(list).to_dict()
     # Parse comparison string and create the dictionary
     comparison_dict = {}
     comparison_types = {}
