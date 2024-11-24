@@ -296,7 +296,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
                     output='{}/samples_pearsonr_heatmap.png'.format(outdir))
 
 
-@cli.command(help_priority=1, help='Multi-samples mode for GISTA')
+@cli.command(help_priority=1, help='Two-samples mode for GISTA')
 @click.option('--samplesfile', '-sf', type=click.Path(exists=True),required=True,
               help='sample metadata sheet, contain TopDom (like) file, .csv or .xlsx')
 @click.option('--comparison', '-c', type=str, required=True, help="Comparison string in the format 'RT,PT;PT-RT,NT', "

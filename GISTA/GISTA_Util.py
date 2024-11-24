@@ -108,6 +108,15 @@ class TadsArray(object):
             current_df.loc[current_df.loc[:,'tag']=='gap','vec'] = -current_df.loc[current_df.loc[:,'tag']=='gap','vec']
             current_df.loc[current_df.loc[:,'tag']=='boundary','vec'] = -current_df.loc[current_df.loc[:,'tag']=='boundary','vec']
             data_tads[self.samples[idx]] = current_df
+        # Identify common chromosomes across all samples
+        common_chromosomes = set(data_tads[self.samples[0]]['chr'].unique())
+        for sample in self.samples[1:]:
+            common_chromosomes &= set(data_tads[sample]['chr'].unique())
+        # Filter data to only include these common chromosomes
+        data_tads_final = {}
+        for sample in self.samples:
+            cur_df = data_tads[sample]
+            data_tads_final[sample] = cur_df[cur_df['chr'].isin(common_chromosomes)].reset_index(drop=True)    
         return data_tads, tad_ids
     def tads_basic_stats(self, data_tads):
         data_stat_tads = {'Sample':[],'domain':[],'boundary':[],'gap':[],'mean.tads.size':[]}
