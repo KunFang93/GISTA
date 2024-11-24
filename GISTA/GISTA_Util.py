@@ -117,7 +117,7 @@ class TadsArray(object):
         for sample in self.samples:
             cur_df = data_tads[sample]
             data_tads_final[sample] = cur_df[cur_df['chr'].isin(common_chromosomes)].reset_index(drop=True)    
-        return data_tads, tad_ids
+        return data_tads_final, tad_ids
     def tads_basic_stats(self, data_tads):
         data_stat_tads = {'Sample':[],'domain':[],'boundary':[],'gap':[],'mean.tads.size':[]}
         data_dist_tads = {'Sample':[],'size':[]}
