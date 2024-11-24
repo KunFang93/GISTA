@@ -276,7 +276,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
                 sample_array[0] -= 0.1
                 sample_array[1] += 0.1
             new_tadarray[sample] = sample_array
-        samples_tad_corr_mat = pd.DataFrame(0, columns=samples, index=samples)
+        samples_tad_corr_mat = pd.DataFrame(0.0, columns=samples, index=samples)
         for subset in itertools.combinations(samples, 2):
             sample1 = subset[0]
             sample2 = subset[1]

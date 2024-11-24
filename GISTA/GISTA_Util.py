@@ -146,6 +146,9 @@ class TadsArray(object):
                 current_chr_df = current_df.loc[current_gb.groups[chrom],:]
                 # +1 is essential for the correct splits
                 idx_list = current_chr_df[current_chr_df.loc[:,'mark'].isin(common_coor)].index.values + 1
+                if len(idx_list) == 0:
+                    print(f"No common idx found in {chrom}, please deleted this chromosome")
+                    exit(1)
                 idx_list_sort = sorted(idx_list)
                 idx_list_sort = idx_list_sort - current_chr_df.index.values[0]
                 # avoid generating empty array
