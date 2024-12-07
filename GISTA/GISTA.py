@@ -220,7 +220,15 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
             print('Skip empty matrix for Mixed')
 
         # finalize 
-        features_df_marked = polish_features_df(features_df_marked.copy(), cur_pvals)
+        mask = np.full(len(features_df_marked), False)
+        mask[features_df_marked[features_df_marked['GroupChange'] == "SV"].index.values] = True
+        # sort
+        features_df_marked = features_df_marked.sort_values(
+            by=['chr', 'start(min)', 'end(max)'],
+            key=natsort_keygen()
+        )
+        features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]),cur_pvals[1])
+        features_df_marked['pval_SV'] = np.where(features_df_marked['GroupChange'] == 'SV', features_df_marked['pval_SV'] / 10,features_df_marked['pval_SV'])
         features_df_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         # save as excel
         with pd.ExcelWriter("{}/{}_tads_sub_array_marks.xlsx".format(outdir,comp),
