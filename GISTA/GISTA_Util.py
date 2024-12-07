@@ -15,6 +15,9 @@ from scipy.stats import pearsonr
 import logomaker
 from functools import reduce
 from natsort import natsort_keygen
+import warnings
+
+warnings.filterwarnings("ignore", message="'DataFrame.swapaxes' is deprecated") # np.split on df warning
 pd.set_option('future.no_silent_downcasting', True)
 
 # v5 add two conditions comparison
@@ -510,7 +513,7 @@ def polish_features_df(features_df_marked):
     features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]),cur_pvals[1])
     features_df_marked['pval_SV'] = np.where(features_df_marked['GroupChange'] == 'SV', features_df_marked['pval_SV'] / 10,features_df_marked['pval_SV'])
     return features_df_marked
-    
+
 def coor_annot(features_df_marked, tads_sub_id_list,tads_sub_annot_dict,samples):
     cols = list(features_df_marked.columns)
     tads_subarray_start = []
