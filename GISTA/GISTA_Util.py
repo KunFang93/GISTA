@@ -14,6 +14,7 @@ import matplotlib
 from scipy.stats import pearsonr
 import logomaker
 from functools import reduce
+pd.set_option('future.no_silent_downcasting', True)
 
 # v5 add two conditions comparison
 def generate_comparison_dict(samples_df, comparison_string):
@@ -145,7 +146,7 @@ class TadsArray(object):
             for chrom in current_gb.groups:
                 current_chr_df = current_df.loc[current_gb.groups[chrom],:]
                 # +1 is essential for the correct splits
-                idx_list = current_chr_df[current_chr_df.loc[:,'mark'].isin(common_coor)].index.values + 1
+                idx_list = current_chr_df[current_chr_df['mark'].isin(common_coor)].index.values + 1
                 if len(idx_list) == 0:
                     print(f"No common idx found in {chrom}, please deleted this chromosome")
                     exit(1)
