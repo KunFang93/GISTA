@@ -24,7 +24,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 from .GISTA_Util import *
-from natsort import natsort_keygen
+
 import logging
 logging.getLogger('matplotlib.font_manager').setLevel(level=logging.CRITICAL)
 # class for setting up subcommand order.

@@ -14,6 +14,7 @@ import matplotlib
 from scipy.stats import pearsonr
 import logomaker
 from functools import reduce
+from natsort import natsort_keygen
 import warnings
 warnings.filterwarnings("ignore", message="'DataFrame.swapaxes' is deprecated")
 # v5 add two conditions comparison
