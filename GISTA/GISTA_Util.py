@@ -14,7 +14,8 @@ import matplotlib
 from scipy.stats import pearsonr
 import logomaker
 from functools import reduce
-
+import warnings
+warnings.filterwarnings("ignore", message="'DataFrame.swapaxes' is deprecated")
 # v5 add two conditions comparison
 def generate_comparison_dict(samples_df, comparison_string):
     # Group samples by GroupID
@@ -496,6 +497,18 @@ def combine_nd_sf_annot(tads_id,nd_marked_df,sf_marked_df,group_level,individual
     # final_df.loc[(final_df[group_level]=='low') & (final_df[individual_level1]='low') & (final_df[individual_level2]=='low'),'bio_mark'] = 'C'
     # final_df.loc[(final_df[group_level]=='low') & (final_df[individual_level1]=='meidum') & (final_df[individual_level2]=='low'),'bio_mark'] = 'C'
     return final_df
+
+def polish_feature_df(features_df_marked, cur_pvals):
+    mask = np.full(len(features_df_marked), False)
+    mask[features_df_marked[features_df_marked['GroupChange'] == "SV"].index.values] = True
+    # sort
+    features_df_marked = features_df_marked.sort_values(
+        by=['chr', 'start(min)', 'end(max)'],
+        key=natsort_keygen()
+    )
+    features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]),cur_pvals[1])
+    features_df_marked['pval_SV'] = np.where(features_df_marked['GroupChange'] == 'SV', features_df_marked['pval_SV'].values / 10,features_df_marked['pval_SV'].values)
+    return
 
 def coor_annot(features_df_marked, tads_sub_id_list,tads_sub_annot_dict,samples):
     cols = list(features_df_marked.columns)
