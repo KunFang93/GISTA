@@ -24,7 +24,6 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 from .GISTA_Util import *
-from natsort import natsort_keygen
 
 # class for setting up subcommand order.
 # Inspired by https://stackoverflow.com/questions/47972638/how-can-i-define-the-order-of-click-sub-commands-in-help
@@ -143,6 +142,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
         nd_data = features_nd.stack()
         sf_data = features_sf.stack()
         # visual 
+        plt.rcParams["font.family"] = "Arial"
         plt.rcParams["font.weight"] = "bold"
         plt.rcParams["axes.labelweight"] = "bold"
         f, ax = plt.subplots(1, 2, sharey=True, sharex=True)
@@ -219,15 +219,8 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
         except IndexError:
             print('Skip empty matrix for Mixed')
 
-        # finalize the pval
-        mask = np.full(len(features_df_marked), False)
-        mask[features_df_marked[features_df_marked['GroupChange'] == "SV"].index.values] = True
-        # sort
-        features_df_marked = features_df_marked.sort_values(
-            by=['chr', 'start(min)', 'end(max)'],
-            key=natsort_keygen()
-        )
-        features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]),cur_pvals[1])/10
+        # finalize 
+        features_df_marked = polish_features_df(features_df_marked)
         features_df_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         # save as excel
         with pd.ExcelWriter("{}/{}_tads_sub_array_marks.xlsx".format(outdir,comp),
@@ -428,14 +421,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
                     print(f"Missing key in summarize_list_dict: {key1}_{key2}")
 
         # finalize the pval
-        mask = np.full(len(features_df_marked), False)
-        mask[features_df_marked[features_df_marked['GroupChange'] == "SV"].index.values] = True
-        features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]), cur_pvals[1])/10
-        # sort
-        features_df_marked = features_df_marked.sort_values(
-            by=['chr', 'start(min)', 'end(max)'],
-            key=natsort_keygen()
-        )
+        features_df_marked = polish_features_df(features_df_marked)
         features_df_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         # save as excel
         with pd.ExcelWriter("{}/{}_tads_sub_array_marks.xlsx".format(outdir, comp),
