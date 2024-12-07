@@ -1,8 +1,10 @@
 # GISTA
 A light-weight tool for finding Group-, Individual-sample Specific TADs (GISTA)
 GISTA is composed of three steps: 1). Partitioning the whole genome into a series of TADs arrays across all samples; 2). Constructing a feature vector for each TADs array; 3). Annotating the type of TAD change to each TADs arrays and statistical inference.
+
 # WorkFlow
 <img src="https://github.com/KunFang93/GISTA/blob/main/Workflow.png" width="900">
+
 # Installation
 ```
 Step1: install mamba from https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html
