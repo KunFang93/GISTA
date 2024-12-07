@@ -220,7 +220,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
             print('Skip empty matrix for Mixed')
 
         # finalize 
-        features_df_marked = polish_features_df(features_df_marked)
+        features_df_marked = polish_features_df(features_df_marked, cur_pvals)
         features_df_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         # save as excel
         with pd.ExcelWriter("{}/{}_tads_sub_array_marks.xlsx".format(outdir,comp),
@@ -421,7 +421,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
                     print(f"Missing key in summarize_list_dict: {key1}_{key2}")
 
         # finalize the pval
-        features_df_marked = polish_features_df(features_df_marked)
+        features_df_marked = polish_features_df(features_df_marked, cur_pvals)
         features_df_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         # save as excel
         with pd.ExcelWriter("{}/{}_tads_sub_array_marks.xlsx".format(outdir, comp),

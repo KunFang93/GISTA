@@ -16,7 +16,8 @@ import logomaker
 from functools import reduce
 from natsort import natsort_keygen
 import warnings
-
+import logging
+logging.getLogger('matplotlib.font_manager').setLevel(level=logging.CRITICAL)
 warnings.filterwarnings("ignore", message="'DataFrame.swapaxes' is deprecated") # np.split on df warning
 pd.set_option('future.no_silent_downcasting', True)
 
@@ -502,7 +503,7 @@ def combine_nd_sf_annot(tads_id,nd_marked_df,sf_marked_df,group_level,individual
     # final_df.loc[(final_df[group_level]=='low') & (final_df[individual_level1]=='meidum') & (final_df[individual_level2]=='low'),'bio_mark'] = 'C'
     return final_df
 
-def polish_features_df(features_df_marked):
+def polish_features_df(features_df_marked, cur_pvals):
     mask = np.full(len(features_df_marked), False)
     mask[features_df_marked[features_df_marked['GroupChange'] == "SV"].index.values] = True
     # sort
