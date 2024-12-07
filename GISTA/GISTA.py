@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from .GISTA_Util import *
 from natsort import natsort_keygen
-plt.rcParams['font.family'] = 'sans-serif'
+
 # class for setting up subcommand order.
 # Inspired by https://stackoverflow.com/questions/47972638/how-can-i-define-the-order-of-click-sub-commands-in-help
 class SpecialHelpOrder(click.Group):
@@ -227,8 +227,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
             by=['chr', 'start(min)', 'end(max)'],
             key=natsort_keygen()
         )
-        features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]),cur_pvals[1])
-        features_df_marked['pval_SV'] = np.where(features_df_marked['GroupChange'] == 'SV', features_df_marked['pval_SV'].values / 10,features_df_marked['pval_SV'].values)
+        features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]),cur_pvals[1])/10
         features_df_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         # save as excel
         with pd.ExcelWriter("{}/{}_tads_sub_array_marks.xlsx".format(outdir,comp),
@@ -431,8 +430,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
         # finalize the pval
         mask = np.full(len(features_df_marked), False)
         mask[features_df_marked[features_df_marked['GroupChange'] == "SV"].index.values] = True
-        features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]), cur_pvals[1])
-        features_df_marked['pval_SV'] = np.where(features_df_marked['GroupChange'] == 'SV', features_df_marked['pval_SV'].values / 10,features_df_marked['pval_SV'].values)
+        features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]), cur_pvals[1])/10
         # sort
         features_df_marked = features_df_marked.sort_values(
             by=['chr', 'start(min)', 'end(max)'],

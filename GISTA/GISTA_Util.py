@@ -14,11 +14,6 @@ import matplotlib
 from scipy.stats import pearsonr
 import logomaker
 from functools import reduce
-from natsort import natsort_keygen
-import warnings
-
-warnings.filterwarnings("ignore", message="'DataFrame.swapaxes' is deprecated") # np.split on df warning
-pd.set_option('future.no_silent_downcasting', True)
 
 # v5 add two conditions comparison
 def generate_comparison_dict(samples_df, comparison_string):
@@ -150,7 +145,7 @@ class TadsArray(object):
             for chrom in current_gb.groups:
                 current_chr_df = current_df.loc[current_gb.groups[chrom],:]
                 # +1 is essential for the correct splits
-                idx_list = current_chr_df[current_chr_df['mark'].isin(common_coor)].index.values + 1
+                idx_list = current_chr_df[current_chr_df.loc[:,'mark'].isin(common_coor)].index.values + 1
                 if len(idx_list) == 0:
                     print(f"No common idx found in {chrom}, please deleted this chromosome")
                     exit(1)
@@ -501,18 +496,6 @@ def combine_nd_sf_annot(tads_id,nd_marked_df,sf_marked_df,group_level,individual
     # final_df.loc[(final_df[group_level]=='low') & (final_df[individual_level1]='low') & (final_df[individual_level2]=='low'),'bio_mark'] = 'C'
     # final_df.loc[(final_df[group_level]=='low') & (final_df[individual_level1]=='meidum') & (final_df[individual_level2]=='low'),'bio_mark'] = 'C'
     return final_df
-
-def polish_features_df(features_df_marked, cur_pvals):
-    mask = np.full(len(features_df_marked), False)
-    mask[features_df_marked[features_df_marked['GroupChange'] == "SV"].index.values] = True
-    # sort
-    features_df_marked = features_df_marked.sort_values(
-        by=['chr', 'start(min)', 'end(max)'],
-        key=natsort_keygen()
-    )
-    features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]),cur_pvals[1])
-    features_df_marked['pval_SV'] = np.where(features_df_marked['GroupChange'] == 'SV', features_df_marked['pval_SV'] / 10,features_df_marked['pval_SV'])
-    return features_df_marked
 
 def coor_annot(features_df_marked, tads_sub_id_list,tads_sub_annot_dict,samples):
     cols = list(features_df_marked.columns)
