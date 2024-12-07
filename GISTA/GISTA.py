@@ -24,7 +24,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 from .GISTA_Util import *
-
+import logging
+logging.getLogger('matplotlib.font_manager').setLevel(level=logging.CRITICAL)
 # class for setting up subcommand order.
 # Inspired by https://stackoverflow.com/questions/47972638/how-can-i-define-the-order-of-click-sub-commands-in-help
 class SpecialHelpOrder(click.Group):
@@ -142,7 +143,6 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
         nd_data = features_nd.stack()
         sf_data = features_sf.stack()
         # visual 
-        plt.rcParams["font.family"] = "Arial"
         plt.rcParams["font.weight"] = "bold"
         plt.rcParams["axes.labelweight"] = "bold"
         f, ax = plt.subplots(1, 2, sharey=True, sharex=True)
@@ -220,7 +220,7 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
             print('Skip empty matrix for Mixed')
 
         # finalize 
-        features_df_marked = polish_features_df(features_df_marked, cur_pvals)
+        features_df_marked = polish_features_df(features_df_marked.copy(), cur_pvals)
         features_df_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         # save as excel
         with pd.ExcelWriter("{}/{}_tads_sub_array_marks.xlsx".format(outdir,comp),
@@ -421,7 +421,7 @@ def two(samplesfile, comparison, binsize, groupcut, individualcut, pseudorep, ou
                     print(f"Missing key in summarize_list_dict: {key1}_{key2}")
 
         # finalize the pval
-        features_df_marked = polish_features_df(features_df_marked, cur_pvals)
+        features_df_marked = polish_features_df(features_df_marked.copy(), cur_pvals)
         features_df_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         # save as excel
         with pd.ExcelWriter("{}/{}_tads_sub_array_marks.xlsx".format(outdir, comp),

@@ -16,8 +16,7 @@ import logomaker
 from functools import reduce
 from natsort import natsort_keygen
 import warnings
-import logging
-logging.getLogger('matplotlib.font_manager').setLevel(level=logging.CRITICAL)
+
 warnings.filterwarnings("ignore", message="'DataFrame.swapaxes' is deprecated") # np.split on df warning
 pd.set_option('future.no_silent_downcasting', True)
 
