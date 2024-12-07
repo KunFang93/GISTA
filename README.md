@@ -34,6 +34,58 @@ GISTA two -sf SampleList_Two.xlsx -c 'RT,PT;PT-RT,NT' --binsize 40000
 
 # Manual
 Please use 'GISTA multi --help' or 'GISTA two --help' to check detailed instruction
+```
+(gista) [kfang@compgeno multi]$ GISTA
+Welcome to use GISTA :)
+Usage: GISTA [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --version  Show the version and exit.
+  --help     Show this message and exit.
+
+Commands:
+  multi  Multi-samples mode for GISTA
+  two    Two-samples mode for GISTA
+```
+**Multi**
+```
+Usage: GISTA multi [OPTIONS]
+
+  Multi-samples mode for GISTA
+
+Options:
+  -sf, --samplesfile PATH     sample metadata sheet, contain TopDom (like)
+                              files, .csv or .xlsx  [required]
+  -c, --comparison TEXT       Comparison string in the format 'RT,PT;PT-
+                              RT,NT', The comparison separate by ';' and treat
+                              and control separate by ',',The second sample is
+                              control  [required]
+  -bs, --binsize INTEGER      resolution/binsize of the TADs
+  -gc, --groupcut FLOAT       Group level high variation cutoff
+  -ic, --individualcut FLOAT  Individual level high variation cutoff
+  -od, --outdir PATH          Output folder
+  --help                      Show this message and exit.
+```
+**Two**
+```
+Usage: GISTA two [OPTIONS]
+
+  Two-samples mode for GISTA
+
+Options:
+  -sf, --samplesfile PATH     sample metadata sheet, contain TopDom (like)
+                              file, .csv or .xlsx  [required]
+  -c, --comparison TEXT       Comparison string in the format 'RT,PT;PT-
+                              RT,NT', The comparison separate by ';' and treat
+                              and control separate by ',',The second sample is
+                              control  [required]
+  -bs, --binsize INTEGER      resolution/binsize of the TADs
+  -gc, --groupcut FLOAT       Group level high variation cutoff
+  -ic, --individualcut FLOAT  Individual level high variation cutoff
+  -pr, --pseudorep INTEGER    The number of Pseudo-replication
+  -od, --outdir PATH          Output folder
+  --help                      Show this message and exit.
+```
 
 # Citation
 If you find this tool useful, please consider cite
