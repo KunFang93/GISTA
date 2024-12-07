@@ -17,6 +17,7 @@ from functools import reduce
 from natsort import natsort_keygen
 import warnings
 warnings.filterwarnings("ignore", message="'DataFrame.swapaxes' is deprecated")
+pd.set_option('future.no_silent_downcasting', True)
 # v5 add two conditions comparison
 def generate_comparison_dict(samples_df, comparison_string):
     # Group samples by GroupID
