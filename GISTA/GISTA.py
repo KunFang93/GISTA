@@ -24,8 +24,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import seaborn as sns
 from .GISTA_Util import *
-import logging
-logging.getLogger('matplotlib.font_manager').setLevel(level=logging.CRITICAL)
+# import logging
+# logging.getLogger('matplotlib.font_manager').setLevel(level=logging.CRITICAL)
 # class for setting up subcommand order.
 # Inspired by https://stackoverflow.com/questions/47972638/how-can-i-define-the-order-of-click-sub-commands-in-help
 class SpecialHelpOrder(click.Group):
@@ -220,15 +220,8 @@ def multi(samplesfile, comparison, binsize, groupcut, individualcut, outdir):
             print('Skip empty matrix for Mixed')
 
         # finalize 
-        mask = np.full(len(features_df_marked), False)
-        mask[features_df_marked[features_df_marked['GroupChange'] == "SV"].index.values] = True
-        # sort
-        features_df_marked = features_df_marked.sort_values(
-            by=['chr', 'start(min)', 'end(max)'],
-            key=natsort_keygen()
-        )
-        features_df_marked['pval_SV'] = np.where(mask, np.minimum(cur_pvals[0], cur_pvals[1]),cur_pvals[1])
-        features_df_marked['pval_SV'] = np.where(features_df_marked['GroupChange'] == 'SV', features_df_marked['pval_SV'] / 10,features_df_marked['pval_SV'])
+        features_df_marked = polish_features_df(features_df_marked.copy(), cur_pvals)
+        print(features_df_marked)
         features_df_dchange = features_df_marked.loc[features_df_marked['GroupChange'] == 'SV', :]
         # save as excel
         with pd.ExcelWriter("{}/{}_tads_sub_array_marks.xlsx".format(outdir,comp),
