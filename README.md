@@ -35,7 +35,6 @@ GISTA two -sf SampleList_Two.xlsx -c 'RT,PT;PT-RT,NT' --binsize 40000
 # Manual
 Please use 'GISTA multi --help' or 'GISTA two --help' to check detailed instruction
 ```
-(gista) [kfang@compgeno multi]$ GISTA
 Welcome to use GISTA :)
 Usage: GISTA [OPTIONS] COMMAND [ARGS]...
 
