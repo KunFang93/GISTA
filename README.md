@@ -15,7 +15,7 @@ Step5: pip install --editable .
 ```
 
 # Quick Start
-#### Currently GISTA only accept TopDom output formats (please check the exmaple data). If you need help, please contact author
+#### Currently GISTA only accept TopDom output formats (please check the exmaple data). If you need help, please reach out ot me :)
 ### Multi-Samples Mode
 ```
 # 'RT,PT;PT-RT,NT' mean process RT.vs.PT and PT+RT.vs.NT
