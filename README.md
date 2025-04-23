@@ -87,7 +87,7 @@ Options:
 ```
 
 # Citation
-If you find this tool useful, please consider cite
+If you find this tool useful, please consider cite. Thank you!
 ```
-Choppavarapu, L., Fang, K., Liu, T., & Jin, V. X. (2024). Hi-C profiling in tissues reveals 3D chromatin-regulated breast tumor heterogeneity and tumor-specific looping-mediated biological pathways. bioRxiv, 2024-03.
+Choppavarapu, L., Fang, K., Liu, T., Ohihoin, A. G., & Jin, V. X. (2025). Hi-C profiling in tissues reveals 3D chromatin-regulated breast tumor heterogeneity informing a looping-mediated therapeutic avenue. Cell reports, 44(4).
 ```
